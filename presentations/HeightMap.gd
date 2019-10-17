@@ -1,6 +1,6 @@
 extends Node2D
 
-const MAP_SIZE = Vector2(70,70)
+export var MAP_SIZE = Vector2(70,70)
 
 export var height_clamp = 0.0
 
@@ -23,11 +23,15 @@ func _ready():
 	generate_level()
 
 func generate_level():
+
 	for x in MAP_SIZE.x:
 		for y in MAP_SIZE.y:
 			var tile = tilemap.get_cellv(Vector2(x,y))
 			if tile >= 0:
 				tilemap.set_cellv(Vector2(x,y), _tile_for_position(x,y))
+	
+	# Esto actualiza el bitmask de los autotiles
+	tilemap.update_bitmask_region(Vector2(0,0), MAP_SIZE)
 	
 func _tile_for_position(x:int, y:int) -> int:
 	var height = noise.get_noise_2d(float(x), float(y))
